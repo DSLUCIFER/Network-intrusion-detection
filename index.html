@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIDS Web Application</title>
+</head>
+<body>
+    <h1>NIDS Web Application</h1>
+    
+    <button id="startButton">Start Capture</button>
+    <button id="stopButton" disabled>Stop Capture</button>
+    <button id="checkButton">Check for Intrusion</button>
+
+    <script>
+        document.getElementById("startButton").addEventListener("click", function() {
+            // Enable the stop button and disable start button
+            document.getElementById("startButton").disabled = true;
+            document.getElementById("stopButton").disabled = false;
+
+            // Send an AJAX request to start capturing packets
+            fetch('/start_capture', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Packet capture started.');
+                    } else {
+                        console.error('Error starting packet capture.');
+                    }
+                })
+                .catch(error => console.error('Error starting packet capture:', error));
+        });
+
+        document.getElementById("stopButton").addEventListener("click", function() {
+            // Enable the start button and disable stop button
+            document.getElementById("startButton").disabled = false;
+            document.getElementById("stopButton").disabled = true;
+
+            // Send an AJAX request to stop capturing packets
+            fetch('/stop_capture', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Packet capture stopped.');
+                    } else {
+                        console.error('Error stopping packet capture.');
+                    }
+                })
+                .catch(error => console.error('Error stopping packet capture:', error));
+        });
+
+        document.getElementById("checkButton").addEventListener("click", function() {
+            // Send an AJAX request to check for intrusion
+            fetch('/check_intrusion', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Intrusion checked.');
+                        // Process response here if needed
+                    } else {
+                        console.error('Error checking for intrusion.');
+                    }
+                })
+                .catch(error => console.error('Error checking for intrusion:', error));
+        });
+    </script>
+</body>
+</html>
